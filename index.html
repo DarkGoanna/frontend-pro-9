@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hw-9</title>
+</head>
+<body>
+    <script>
+        var toDoList = {
+            list: {},
+            add: function () {
+                var id = Date.now();
+                var text = prompt('Добавить новое задание:');
+                if (text) {
+                    this['list'][id] = {
+                        text,
+                        status: 'новое',
+                    }
+                    return id;
+                } return 'Задание не создано'
+            },
+            delete: function (id) {
+                if (this['list'][id]) {
+                    delete this['list'][id];
+                    return 'Задание успешно удалено';
+                } return 'задания с таким id не найдено';
+            },
+            edit: function (id) {
+                if (this['list'][id]) {
+                    this['list'][id]['text'] = prompt('Изменить на:');
+                    return 'Задание изменено';
+                } return 'задания с таким id не найдено';
+            },
+            ready: function (id) {
+                if (this['list'][id]) {
+                    this['list'][id]['status'] = 'выполнено';
+                    return 'Задание выполнено';
+                } return 'задания с таким id не найдено';
+            },
+        };
+        Object.freeze(toDoList);
+    </script>
+</body>
+</html>
