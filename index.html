@@ -8,37 +8,53 @@
 <body>
     <script>
         var toDoList = {
-            list: {},
+            _list: [],
+            get list () {
+                return this._list;
+            },
             add: function () {
                 var id = Date.now();
                 var text = prompt('Добавить новое задание:');
                 if (text) {
-                    this['list'][id] = {
-                        text,
+                    this.list.push({
+                        text: text.trim(),
+                        id,
                         status: 'новое',
-                    }
+                    });
                     return id;
                 } return 'Задание не создано'
             },
             delete: function (id) {
-                if (this['list'][id]) {
-                    delete this['list'][id];
-                    return 'Задание успешно удалено';
-                } return 'задания с таким id не найдено';
+                var index = this.findIndex(id);
+                if (index == -1) {
+                    return 'задания с таким id не найдено';
+                } this.list.splice(index, 1);
+                return 'Задание успешно удалено';
             },
             edit: function (id) {
-                if (this['list'][id]) {
-                    this['list'][id]['text'] = prompt('Изменить на:');
-                    return 'Задание изменено';
-                } return 'задания с таким id не найдено';
+                var index = this.findIndex(id);
+                if (index == -1) {
+                    return 'задания с таким id не найдено';
+                } this.list[index].text = prompt('Изменить на:');
+                return 'Задание изменено';
             },
             ready: function (id) {
-                if (this['list'][id]) {
-                    this['list'][id]['status'] = 'выполнено';
-                    return 'Задание выполнено';
-                } return 'задания с таким id не найдено';
+                var index = this.findIndex(id);
+                if (index == -1) {
+                    return 'задания с таким id не найдено';
+                } this.list[index].status = 'выполнено';
+                return 'Задание выполнено';
             },
+            findIndex: function (value) {
+                return this.list.findIndex(function (obj) {
+                    if (obj.id == value) return obj;
+                });
+            }
         };
+        Object.defineProperty(toDoList, '_list', {
+            writable: false,
+            configurable: false,
+        });
         Object.freeze(toDoList);
     </script>
 </body>
