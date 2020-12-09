@@ -12,40 +12,42 @@
             get list () {
                 return this._list;
             },
-            add: function () {
+            set add(text) {
                 var id = Date.now();
-                var text = prompt('Добавить новое задание:');
+                if (typeof text === 'string') {
+                    text = text.trim();
+                };
                 if (text) {
                     this.list.push({
-                        text: text.trim(),
+                        text,
                         id,
-                        status: 'новое',
+                        isDone: false,
                     });
-                    return id;
-                } return 'Задание не создано'
+                }
+                return id;
             },
             delete: function (id) {
-                var index = this.findIndex(id);
-                if (index == -1) {
-                    return 'задания с таким id не найдено';
-                } this.list.splice(index, 1);
-                return 'Задание успешно удалено';
+                var index = this.getNoteIndex(id);
+                if (index != -1) {
+                    return this.list.splice(index, 1);
+                };
             },
-            edit: function (id) {
-                var index = this.findIndex(id);
-                if (index == -1) {
-                    return 'задания с таким id не найдено';
-                } this.list[index].text = prompt('Изменить на:');
-                return 'Задание изменено';
+            edit: function (id, newText) {
+                var index = this.getNoteIndex(id);
+                if (typeof newText === 'string') {
+                    newText = newText.trim();
+                }
+                if (index != -1 && newText) {
+                    return this.list[index].text = newText;
+                };
             },
             ready: function (id) {
-                var index = this.findIndex(id);
-                if (index == -1) {
-                    return 'задания с таким id не найдено';
-                } this.list[index].status = 'выполнено';
-                return 'Задание выполнено';
+                var index = this.getNoteIndex(id);
+                if (index != -1) {
+                    return this.list[index].isDone = true;
+                };
             },
-            findIndex: function (value) {
+            getNoteIndex: function (value) {
                 return this.list.findIndex(function (obj) {
                     if (obj.id == value) return obj;
                 });
