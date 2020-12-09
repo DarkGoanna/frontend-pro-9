@@ -12,7 +12,7 @@
             get list () {
                 return this._list;
             },
-            set add(text) {
+            add: function (text) {
                 var id = Date.now();
                 if (typeof text === 'string') {
                     text = text.trim();
@@ -24,13 +24,14 @@
                         isDone: false,
                     });
                 }
-                return id;
+                return this.list;
             },
             delete: function (id) {
                 var index = this.getNoteIndex(id);
                 if (index != -1) {
-                    return this.list.splice(index, 1);
+                    this.list.splice(index, 1);
                 };
+                return this.list;
             },
             edit: function (id, newText) {
                 var index = this.getNoteIndex(id);
@@ -38,14 +39,16 @@
                     newText = newText.trim();
                 }
                 if (index != -1 && newText) {
-                    return this.list[index].text = newText;
+                    this.list[index].text = newText;
                 };
+                return this.list;
             },
             ready: function (id) {
                 var index = this.getNoteIndex(id);
                 if (index != -1) {
-                    return this.list[index].isDone = true;
+                    this.list[index].isDone = true;
                 };
+                return this.list;
             },
             getNoteIndex: function (value) {
                 return this.list.findIndex(function (obj) {
